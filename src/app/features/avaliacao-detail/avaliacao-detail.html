@@ -1,0 +1,138 @@
+<div class="container py-4">
+  <app-alert #alertRef [message]="alertMessage" [type]="alertType" [autoDismiss]="true" />
+
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary"></div>
+  </div>
+
+  <ng-container *ngIf="!loading && avaliacao">
+    <div class="mb-3">
+      <a routerLink="/avaliacoes" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-arrow-left"></i> Voltar
+      </a>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">
+          {{ avaliacao.colaborador.nome }} — {{ avaliacao.mesCompetencia }}
+        </h5>
+        <div class="d-flex gap-2 align-items-center">
+          <app-status-badge [status]="avaliacao.statusAvaliacao" />
+
+          <button
+            *ngIf="avaliacao.statusAvaliacao === 'Criada'"
+            class="btn btn-sm btn-primary"
+            (click)="onIniciar()"
+          >
+            <i class="bi bi-play-fill"></i> Iniciar
+          </button>
+
+          <button
+            *ngIf="avaliacao.statusAvaliacao === 'Em elaboração'"
+            class="btn btn-sm btn-warning"
+            (click)="onDarFeedback()"
+          >
+            <i class="bi bi-chat-dots"></i> Dar Feedback
+          </button>
+
+          <button
+            *ngIf="avaliacao.statusAvaliacao === 'Em avaliação'"
+            class="btn btn-sm btn-success"
+            (click)="onConcluir()"
+          >
+            <i class="bi bi-check-lg"></i> Concluir
+          </button>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <div class="row g-3 mb-4">
+          <div class="col-md-4">
+            <label class="form-label text-muted small">Colaborador</label>
+            <input class="form-control" [value]="avaliacao.colaborador.nome" readonly />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label text-muted small">Supervisor</label>
+            <input class="form-control" [value]="avaliacao.supervisor.nome" readonly />
+          </div>
+          <div class="col-md-2">
+            <label class="form-label text-muted small">Competência</label>
+            <input class="form-control" [value]="avaliacao.mesCompetencia" readonly />
+          </div>
+          <div class="col-md-1">
+            <label class="form-label text-muted small">Nota</label>
+            <input class="form-control" [value]="avaliacao.nota" readonly />
+          </div>
+        </div>
+
+        <form [formGroup]="form" (ngSubmit)="onSalvar()">
+          <div class="mb-3">
+            <label class="form-label">Sugestões do supervisor</label>
+            <textarea
+              class="form-control"
+              rows="3"
+              formControlName="sugestoesSupervisor"
+              [readonly]="!canEdit"
+            ></textarea>
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label">Observações do avaliado</label>
+            <textarea
+              class="form-control"
+              rows="3"
+              formControlName="observacoesAvaliado"
+              [readonly]="!canEdit"
+            ></textarea>
+          </div>
+
+          <div *ngIf="itens.length > 0">
+            <h6 class="mb-3">Itens de Avaliação</h6>
+            <div
+              *ngFor="let item of itens.controls; let i = index"
+              [formGroup]="$any(item)"
+              class="border rounded p-3 mb-3"
+            >
+              <div class="row g-2 align-items-center">
+                <div class="col-md-6">
+                  <span class="fw-semibold">
+                    {{ avaliacao.itens![i].tipoItemAvaliacaoDesempenho.descricao }}
+                  </span>
+                  <span class="badge bg-light text-dark ms-2">
+                    {{ avaliacao.itens![i].tipoItemAvaliacaoDesempenho.dimensao }}
+                  </span>
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label small text-muted">Nota (1–5)</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    formControlName="nota"
+                    min="1"
+                    max="5"
+                    [readonly]="!canEdit"
+                  />
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label small text-muted">Observações</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="observacoes"
+                    [readonly]="!canEdit"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="canEdit" class="d-flex justify-content-end gap-2 mt-3">
+            <a routerLink="/avaliacoes" class="btn btn-danger">Cancelar</a>
+            <button type="submit" class="btn btn-primary">Salvar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </ng-container>
+</div>
