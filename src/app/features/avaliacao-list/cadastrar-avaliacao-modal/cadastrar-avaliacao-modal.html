@@ -1,0 +1,55 @@
+<div class="modal fade" id="cadastrarModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cadastrar avaliação</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <form [formGroup]="form" id="cadastrarForm" (ngSubmit)="onSubmit()">
+          <div class="mb-3">
+            <label class="form-label">Colaborador <span class="text-danger">*</span></label>
+            <select class="form-select" formControlName="colaborador">
+              <option [ngValue]="null" disabled>Selecione</option>
+              <option *ngFor="let c of formData.colaboradores" [value]="c.id">
+                {{ c.nome }}
+              </option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Supervisor <span class="text-danger">*</span></label>
+            <select class="form-select" formControlName="supervisor">
+              <option [ngValue]="null" disabled>Selecione</option>
+              <option *ngFor="let s of formData.supervisores" [value]="s.id">
+                {{ s.nome }}
+              </option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Competência <span class="text-danger">*</span></label>
+            <input
+              type="month"
+              class="form-control"
+              formControlName="mesCompetencia"
+            />
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+        <button
+          type="submit"
+          form="cadastrarForm"
+          class="btn btn-primary"
+          [disabled]="form.invalid"
+        >
+          Cadastrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
