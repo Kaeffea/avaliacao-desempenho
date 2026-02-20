@@ -11,7 +11,7 @@ import { AlertComponent, AlertType } from '../../shared/components/alert/alert';
   selector: 'app-avaliacao-detail',
   standalone: true,
   imports: [CommonModule, RouterModule, ReactiveFormsModule, StatusBadgeComponent, AlertComponent],
-  templateUrl: './avaliacao-detail.component.html',
+  templateUrl: './avaliacao-detail.html',
 })
 export class AvaliacaoDetailComponent implements OnInit {
   @ViewChild('alertRef') alertRef!: AlertComponent;
