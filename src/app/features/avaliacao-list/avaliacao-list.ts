@@ -17,7 +17,7 @@ import { CadastrarAvaliacaoModalComponent } from './cadastrar-avaliacao-modal/ca
     AlertComponent,
     CadastrarAvaliacaoModalComponent,
   ],
-  templateUrl: './avaliacao-list.component.html',
+  templateUrl: './avaliacao-list.html',
 })
 export class AvaliacaoListComponent implements OnInit {
   @ViewChild('alertRef') alertRef!: AlertComponent;

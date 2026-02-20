@@ -7,7 +7,7 @@ import { AvaliacaoDesempenhoForm, CadastrarAvaliacaoPayload } from '../../../cor
   selector: 'app-cadastrar-avaliacao-modal',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './cadastrar-avaliacao-modal.component.html',
+  templateUrl: './cadastrar-avaliacao-modal.html',
 })
 export class CadastrarAvaliacaoModalComponent implements OnInit {
   @Input() formData!: AvaliacaoDesempenhoForm;
