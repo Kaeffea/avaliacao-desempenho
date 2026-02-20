@@ -1,0 +1,66 @@
+<div class="container py-4">
+  <app-alert #alertRef [message]="alertMessage" [type]="alertType" [autoDismiss]="true" />
+
+  <div class="card shadow-sm">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">Avaliações de desempenho</h5>
+      <button
+        class="btn btn-primary btn-sm"
+        data-bs-toggle="modal"
+        data-bs-target="#cadastrarModal"
+      >
+        <i class="bi bi-plus-lg"></i>
+      </button>
+    </div>
+
+    <div class="card-body p-0">
+      <div *ngIf="loading" class="text-center py-5">
+        <div class="spinner-border text-primary"></div>
+      </div>
+
+      <table *ngIf="!loading" class="table table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>#</th>
+            <th>Colaborador</th>
+            <th>Competência</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let avaliacao of avaliacoes; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ avaliacao.colaborador.nome }}</td>
+            <td>{{ avaliacao.mesCompetencia }}</td>
+            <td>
+              <app-status-badge [status]="avaliacao.statusAvaliacao" />
+            </td>
+            <td>
+              <div class="d-flex gap-2">
+                
+                  [routerLink]="['/avaliacoes', avaliacao.id]"
+                  class="btn btn-sm btn-outline-secondary"
+                  title="Visualizar"
+                >
+                  <i class="bi bi-eye"></i>
+                </a>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="avaliacoes.length === 0">
+            <td colspan="5" class="text-center text-muted py-4">
+              Nenhuma avaliação encontrada.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<app-cadastrar-avaliacao-modal
+  *ngIf="formData"
+  [formData]="formData"
+  (cadastrar)="onCadastrar($event)"
+/>
