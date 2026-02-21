@@ -10,28 +10,41 @@
         <form [formGroup]="form" id="cadastrarForm" (ngSubmit)="onSubmit()">
           <div class="mb-3">
             <label class="form-label">Colaborador <span class="text-danger">*</span></label>
-            <select class="form-select" formControlName="id_colaborador">
-              <option [ngValue]="null" disabled>Selecione</option>
-              <option *ngFor="let c of formData.colaboradores" [value]="c.id_colaborador">
-                {{ c.nome }}
-              </option>
-            </select>
+            <div class="custom-select-wrapper">
+              <select class="custom-select-field" formControlName="id_colaborador">
+                <option [ngValue]="null" disabled>Selecione um colaborador</option>
+                <option *ngFor="let c of formData.colaboradores" [value]="c.id_colaborador">
+                  {{ c.nome }}
+                </option>
+              </select>
+              <i class="bi bi-chevron-down custom-select-icon"></i>
+            </div>
           </div>
 
           <div class="mb-3">
             <label class="form-label">Supervisor <span class="text-danger">*</span></label>
-            <select class="form-select" formControlName="id_supervisor">
-              <option [ngValue]="null" disabled>Selecione</option>
-              <option *ngFor="let s of formData.supervisores" [value]="s.id_supervisor">
-                {{ s.nome }}
-              </option>
-            </select>
+            <div class="custom-select-wrapper">
+              <select class="custom-select-field" formControlName="id_supervisor">
+                <option [ngValue]="null" disabled>Selecione um supervisor</option>
+                <option *ngFor="let s of formData.supervisores" [value]="s.id_supervisor">
+                  {{ s.nome }}
+                </option>
+              </select>
+              <i class="bi bi-chevron-down custom-select-icon"></i>
+            </div>
           </div>
 
           <div class="mb-3">
             <label class="form-label">Competência <span class="text-danger">*</span></label>
-            <input type="month" class="form-control" formControlName="competencia" />
-            <div class="form-text">Selecione o mês e ano de competência.</div>
+            <div class="custom-month-wrapper" (click)="openMonthPicker($event)">
+              <i class="bi bi-calendar3 custom-month-icon"></i>
+              <input
+                #monthInput
+                type="month"
+                class="custom-month-input"
+                formControlName="competencia"
+              />
+            </div>
           </div>
         </form>
       </div>

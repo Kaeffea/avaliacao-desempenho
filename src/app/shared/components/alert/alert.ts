@@ -10,11 +10,17 @@ export type AlertType = 'success' | 'danger' | 'warning' | 'info';
   template: `
     <div
       *ngIf="visible"
-      class="alert alert-{{ type }} alert-dismissible fade show"
+      class="custom-alert alert-{{ type }}"
       role="alert"
     >
-      {{ message }}
-      <button type="button" class="btn-close" (click)="visible = false"></button>
+      <i class="bi flex-shrink-0" [ngClass]="{
+        'bi-check-circle-fill': type === 'success',
+        'bi-x-circle-fill': type === 'danger',
+        'bi-exclamation-triangle-fill': type === 'warning',
+        'bi-info-circle-fill': type === 'info'
+      }"></i>
+      <span style="flex:1">{{ message }}</span>
+      <button type="button" class="btn-close flex-shrink-0" style="font-size:0.7rem" (click)="visible = false"></button>
     </div>
   `,
 })
@@ -28,7 +34,7 @@ export class AlertComponent {
   show(): void {
     this.visible = true;
     if (this.autoDismiss) {
-      setTimeout(() => (this.visible = false), 4000);
+      setTimeout(() => (this.visible = false), 5000);
     }
   }
 }

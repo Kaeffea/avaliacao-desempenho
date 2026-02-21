@@ -15,6 +15,17 @@ export class CadastrarAvaliacaoModalComponent implements OnInit {
   @Input() formData!: AvaliacaoDesempenhoForm;
   @Output() cadastrar = new EventEmitter<CadastrarAvaliacaoPayload>();
   @ViewChild('modalRef') modalRef!: ElementRef;
+  @ViewChild('monthInput') monthInput!: ElementRef<HTMLInputElement>;
+
+  openMonthPicker(event: Event): void {
+    const input = this.monthInput.nativeElement;
+    input.focus();
+    try {
+      input.showPicker();
+    } catch {
+      input.click();
+    }
+  }
 
   form!: FormGroup;
 

@@ -105,4 +105,10 @@ export class AvaliacaoDetailComponent implements OnInit {
     this.cdr.detectChanges();
     setTimeout(() => this.alertRef?.show(), 0);
   }
+
+  autoResize(event: Event): void {
+    const el = event.target as HTMLTextAreaElement;
+    el.style.height = 'auto';
+    el.style.height = el.scrollHeight + 'px';
+  }
 }

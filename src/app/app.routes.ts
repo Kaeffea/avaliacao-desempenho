@@ -16,5 +16,12 @@ export const routes: Routes = [
         (m) => m.AvaliacaoDetailComponent
       ),
   },
+  {
+    path: 'avaliacoes/:id/editar',
+    loadComponent: () =>
+      import('./features/avaliacao-detail/avaliacao-detail').then(
+        (m) => m.AvaliacaoDetailComponent
+      ),
+  },
   { path: '**', redirectTo: 'avaliacoes' },
 ];
