@@ -1,4 +1,4 @@
-<div class="modal fade" id="cadastrarModal" tabindex="-1">
+<div class="modal fade" id="cadastrarModal" tabindex="-1" #modalRef>
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -10,9 +10,9 @@
         <form [formGroup]="form" id="cadastrarForm" (ngSubmit)="onSubmit()">
           <div class="mb-3">
             <label class="form-label">Colaborador <span class="text-danger">*</span></label>
-            <select class="form-select" formControlName="colaborador">
+            <select class="form-select" formControlName="id_colaborador">
               <option [ngValue]="null" disabled>Selecione</option>
-              <option *ngFor="let c of formData.colaboradores" [value]="c.id">
+              <option *ngFor="let c of formData.colaboradores" [value]="c.id_colaborador">
                 {{ c.nome }}
               </option>
             </select>
@@ -20,9 +20,9 @@
 
           <div class="mb-3">
             <label class="form-label">Supervisor <span class="text-danger">*</span></label>
-            <select class="form-select" formControlName="supervisor">
+            <select class="form-select" formControlName="id_supervisor">
               <option [ngValue]="null" disabled>Selecione</option>
-              <option *ngFor="let s of formData.supervisores" [value]="s.id">
+              <option *ngFor="let s of formData.supervisores" [value]="s.id_supervisor">
                 {{ s.nome }}
               </option>
             </select>
@@ -30,11 +30,8 @@
 
           <div class="mb-3">
             <label class="form-label">Competência <span class="text-danger">*</span></label>
-            <input
-              type="month"
-              class="form-control"
-              formControlName="mesCompetencia"
-            />
+            <input type="month" class="form-control" formControlName="competencia" />
+            <div class="form-text">Selecione o mês e ano de competência.</div>
           </div>
         </form>
       </div>

@@ -1,6 +1,17 @@
 <div class="container py-4">
   <app-alert #alertRef [message]="alertMessage" [type]="alertType" [autoDismiss]="true" />
 
+  <div
+    *ngIf="mutating"
+    class="position-fixed top-0 start-0 w-100 h-100 d-flex flex-column justify-content-center align-items-center"
+    style="background:rgba(0,0,0,0.45);z-index:9999"
+  >
+    <div class="spinner-border text-light mb-3" role="status" style="width:3rem;height:3rem">
+      <span class="visually-hidden">Aguardando...</span>
+    </div>
+    <span class="text-white fw-semibold">Aguardando resposta da API...</span>
+  </div>
+
   <div class="card shadow-sm">
     <div class="card-header d-flex justify-content-between align-items-center">
       <h5 class="mb-0">Avaliações de desempenho</h5>
@@ -8,17 +19,28 @@
         class="btn btn-primary btn-sm"
         data-bs-toggle="modal"
         data-bs-target="#cadastrarModal"
+        [disabled]="!formData"
       >
         <i class="bi bi-plus-lg"></i>
       </button>
     </div>
 
     <div class="card-body p-0">
-      <div *ngIf="loading" class="text-center py-5">
-        <div class="spinner-border text-primary"></div>
+      <div *ngIf="loading" class="text-center py-5"> 
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Carregando...</span>
+        </div>
       </div>
 
-      <table *ngIf="!loading" class="table table-hover mb-0">
+      <div *ngIf="!loading && apiError" class="text-center py-5 text-muted">
+        <i class="bi bi-wifi-off fs-1 d-block mb-2"></i>
+        <p class="mb-1">Não foi possível conectar à API.</p>
+        <button class="btn btn-outline-primary btn-sm mt-2" (click)="loadAvaliacoes()">
+          <i class="bi bi-arrow-clockwise"></i> Tentar novamente
+        </button>
+      </div>
+
+      <table *ngIf="!loading && !apiError" class="table table-hover mb-0">
         <thead class="table-light">
           <tr>
             <th>#</th>
@@ -31,19 +53,56 @@
         <tbody>
           <tr *ngFor="let avaliacao of avaliacoes; let i = index">
             <td>{{ i + 1 }}</td>
-            <td>{{ avaliacao.colaborador.nome }}</td>
-            <td>{{ avaliacao.mesCompetencia }}</td>
+            <td>{{ avaliacao.nome_colaborador }}</td>
+            <td>{{ avaliacao.competencia }}</td>
             <td>
-              <app-status-badge [status]="avaliacao.statusAvaliacao" />
+              <app-status-badge [status]="avaliacao.status.descricao" />
             </td>
             <td>
-              <div class="d-flex gap-2">
-                
-                  [routerLink]="['/avaliacoes', avaliacao.id]"
+              <div class="d-flex gap-1">
+                <a
+                  [routerLink]="['/avaliacoes', avaliacao.id_avaliacao]"
                   class="btn btn-sm btn-outline-secondary"
                   title="Visualizar"
                 >
                   <i class="bi bi-eye"></i>
+                </a>
+
+                <button
+                  class="btn btn-sm btn-outline-primary"
+                  title="Iniciar"
+                  [disabled]="avaliacao.status.id !== 1"
+                  (click)="onIniciar(avaliacao.id_avaliacao)"
+                >
+                  <i class="bi bi-play-fill"></i>
+                </button>
+
+                <a
+                  [routerLink]="['/avaliacoes', avaliacao.id_avaliacao]"
+                  class="btn btn-sm btn-outline-dark"
+                  title="Editar"
+                  [class.disabled]="avaliacao.status.id !== 2 && avaliacao.status.id !== 3"
+                >
+                  <i class="bi bi-pencil-square"></i>
+                </a>
+
+                <button
+                  class="btn btn-sm btn-outline-warning"
+                  title="Dar feedback"
+                  [disabled]="avaliacao.status.id !== 2"
+                  (click)="onDarFeedback(avaliacao.id_avaliacao)"
+                >
+                  <i class="bi bi-mic"></i>
+                </button>
+
+                <button
+                  class="btn btn-sm btn-outline-success"
+                  title="Concluir"
+                  [disabled]="avaliacao.status.id !== 3"
+                  (click)="onConcluir(avaliacao.id_avaliacao)"
+                >
+                  <i class="bi bi-check-square"></i>
+                </button>
               </div>
             </td>
           </tr>

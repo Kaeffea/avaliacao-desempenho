@@ -1,8 +1,21 @@
 <div class="container py-4">
   <app-alert #alertRef [message]="alertMessage" [type]="alertType" [autoDismiss]="true" />
 
+  <div
+    *ngIf="mutating"
+    class="position-fixed top-0 start-0 w-100 h-100 d-flex flex-column justify-content-center align-items-center"
+    style="background:rgba(0,0,0,0.45);z-index:9999"
+  >
+    <div class="spinner-border text-light mb-3" role="status" style="width:3rem;height:3rem">
+      <span class="visually-hidden">Aguardando...</span>
+    </div>
+    <span class="text-white fw-semibold">Aguardando resposta da API...</span>
+  </div>
+
   <div *ngIf="loading" class="text-center py-5">
-    <div class="spinner-border text-primary"></div>
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Carregando...</span>
+    </div>
   </div>
 
   <ng-container *ngIf="!loading && avaliacao">
@@ -15,54 +28,28 @@
     <div class="card shadow-sm mb-4">
       <div class="card-header d-flex justify-content-between align-items-center">
         <h5 class="mb-0">
-          {{ avaliacao.colaborador.nome }} — {{ avaliacao.mesCompetencia }}
+          {{ avaliacao.nome_colaborador }} — {{ avaliacao.competencia }}
         </h5>
-        <div class="d-flex gap-2 align-items-center">
-          <app-status-badge [status]="avaliacao.statusAvaliacao" />
-
-          <button
-            *ngIf="avaliacao.statusAvaliacao === 'Criada'"
-            class="btn btn-sm btn-primary"
-            (click)="onIniciar()"
-          >
-            <i class="bi bi-play-fill"></i> Iniciar
-          </button>
-
-          <button
-            *ngIf="avaliacao.statusAvaliacao === 'Em elaboração'"
-            class="btn btn-sm btn-warning"
-            (click)="onDarFeedback()"
-          >
-            <i class="bi bi-chat-dots"></i> Dar Feedback
-          </button>
-
-          <button
-            *ngIf="avaliacao.statusAvaliacao === 'Em avaliação'"
-            class="btn btn-sm btn-success"
-            (click)="onConcluir()"
-          >
-            <i class="bi bi-check-lg"></i> Concluir
-          </button>
-        </div>
+        <app-status-badge [status]="avaliacao.status.descricao" />
       </div>
 
       <div class="card-body">
         <div class="row g-3 mb-4">
           <div class="col-md-4">
             <label class="form-label text-muted small">Colaborador</label>
-            <input class="form-control" [value]="avaliacao.colaborador.nome" readonly />
+            <input class="form-control" [value]="avaliacao.nome_colaborador" readonly />
           </div>
           <div class="col-md-4">
             <label class="form-label text-muted small">Supervisor</label>
-            <input class="form-control" [value]="avaliacao.supervisor.nome" readonly />
+            <input class="form-control" [value]="avaliacao.nome_supervisor" readonly />
           </div>
           <div class="col-md-2">
             <label class="form-label text-muted small">Competência</label>
-            <input class="form-control" [value]="avaliacao.mesCompetencia" readonly />
+            <input class="form-control" [value]="avaliacao.competencia" readonly />
           </div>
-          <div class="col-md-1">
+          <div class="col-md-2">
             <label class="form-label text-muted small">Nota</label>
-            <input class="form-control" [value]="avaliacao.nota" readonly />
+            <input class="form-control" [value]="avaliacao.nota ?? '—'" readonly />
           </div>
         </div>
 
@@ -72,8 +59,8 @@
             <textarea
               class="form-control"
               rows="3"
-              formControlName="sugestoesSupervisor"
-              [readonly]="!canEdit"
+              formControlName="sugestao_supervisor"
+              [attr.readonly]="!canEdit ? true : null"
             ></textarea>
           </div>
 
@@ -82,8 +69,8 @@
             <textarea
               class="form-control"
               rows="3"
-              formControlName="observacoesAvaliado"
-              [readonly]="!canEdit"
+              formControlName="observacao_avaliado"
+              [attr.readonly]="!canEdit ? true : null"
             ></textarea>
           </div>
 
@@ -111,7 +98,7 @@
                     formControlName="nota"
                     min="1"
                     max="5"
-                    [readonly]="!canEdit"
+                    [attr.readonly]="!canEdit ? true : null"
                   />
                 </div>
                 <div class="col-md-4">
@@ -120,7 +107,7 @@
                     type="text"
                     class="form-control"
                     formControlName="observacoes"
-                    [readonly]="!canEdit"
+                    [attr.readonly]="!canEdit ? true : null"
                   />
                 </div>
               </div>
