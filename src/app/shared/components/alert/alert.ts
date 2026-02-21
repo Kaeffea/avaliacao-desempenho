@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export type AlertType = 'success' | 'danger' | 'warning' | 'info';
@@ -18,16 +18,12 @@ export type AlertType = 'success' | 'danger' | 'warning' | 'info';
     </div>
   `,
 })
-export class AlertComponent implements OnInit {
+export class AlertComponent {
   @Input() message = '';
   @Input() type: AlertType = 'info';
   @Input() autoDismiss = true;
 
   visible = false;
-
-  ngOnInit(): void {
-    if (this.message) this.show();
-  }
 
   show(): void {
     this.visible = true;

@@ -29,3 +29,7 @@ Acesse [http://localhost:4200](http://localhost:4200).
 - Bootstrap 5
 - Bootstrap Icons
 - RxJS
+
+## Observações sobre a API
+
+O endpoint `POST /avaliacoes_desempenho/{id}/editar/` retorna HTTP 500 no ambiente de teste disponibilizado. Todos os outros endpoints funcionam corretamente. A integração no front-end está implementada conforme especificado — o erro é exclusivo do servidor de teste.
