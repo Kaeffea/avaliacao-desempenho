@@ -1,7 +1,9 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AvaliacaoDesempenhoForm, CadastrarAvaliacaoPayload } from '../../../core/interfaces/avaliacao-desempenho';
+import { CadastrarAvaliacaoPayload, AvaliacaoDesempenhoForm } from '../../../core/interfaces/avaliacao-desempenho';
+
+declare const bootstrap: any;
 
 @Component({
   selector: 'app-cadastrar-avaliacao-modal',
@@ -12,6 +14,18 @@ import { AvaliacaoDesempenhoForm, CadastrarAvaliacaoPayload } from '../../../cor
 export class CadastrarAvaliacaoModalComponent implements OnInit {
   @Input() formData!: AvaliacaoDesempenhoForm;
   @Output() cadastrar = new EventEmitter<CadastrarAvaliacaoPayload>();
+  @ViewChild('modalRef') modalRef!: ElementRef;
+  @ViewChild('monthInput') monthInput!: ElementRef<HTMLInputElement>;
+
+  openMonthPicker(event: Event): void {
+    const input = this.monthInput.nativeElement;
+    input.focus();
+    try {
+      input.showPicker();
+    } catch {
+      input.click();
+    }
+  }
 
   form!: FormGroup;
 
@@ -19,15 +33,30 @@ export class CadastrarAvaliacaoModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      colaborador: [null, Validators.required],
-      supervisor: [null, Validators.required],
-      mesCompetencia: [null, Validators.required],
+      id_colaborador: [null, Validators.required],
+      id_supervisor: [null, Validators.required],
+      competencia: [null, Validators.required],
     });
   }
 
   onSubmit(): void {
     if (this.form.invalid) return;
-    this.cadastrar.emit(this.form.value as CadastrarAvaliacaoPayload);
+    const raw = this.form.value;
+    const [year, month] = raw.competencia.split('-');
+    const payload: CadastrarAvaliacaoPayload = {
+      id_colaborador: Number(raw.id_colaborador),
+      id_supervisor: Number(raw.id_supervisor),
+      competencia: `${month}/${year}`,
+    };
+    this.cadastrar.emit(payload);
+  }
+
+  close(): void {
+    const el = document.getElementById('cadastrarModal');
+    if (el) {
+      const modal = bootstrap.Modal.getOrCreateInstance(el);
+      modal.hide();
+    }
     this.form.reset();
   }
 }

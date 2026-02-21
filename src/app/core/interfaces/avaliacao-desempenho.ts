@@ -1,14 +1,32 @@
-export type StatusAvaliacao = 'Criada' | 'Em elaboração' | 'Em avaliação' | 'Concluída';
-
-export interface Colaborador {
+export interface StatusAvaliacao {
   id: number;
-  nome: string;
+  descricao: string;
+}
+
+export interface AvaliacaoResumo {
+  id_avaliacao: number;
+  nome_colaborador: string;
+  competencia: string;
+  status: StatusAvaliacao;
+}
+
+export interface AvaliacaoDetalhe {
+  id_avaliacao: number;
+  id_colaborador: number;
+  nome_colaborador: string;
+  id_supervisor: number;
+  nome_supervisor: string;
+  competencia: string;
+  status: StatusAvaliacao;
+  nota: number | null;
+  sugestao_supervisor: string;
+  observacao_avaliado: string;
+  itens?: ItemAvaliacaoDesempenho[];
 }
 
 export interface TipoItemAvaliacaoDesempenho {
   id: number;
   dimensao: string;
-  tipoItemAvaliacaoDesempenho: string;
   descricao: string;
 }
 
@@ -19,31 +37,29 @@ export interface ItemAvaliacaoDesempenho {
   observacoes?: string;
 }
 
-export interface AvaliacaoDesempenho {
-  id: number;
-  colaborador: Colaborador;
-  supervisor: Colaborador;
-  mesCompetencia: string;
-  statusAvaliacao: StatusAvaliacao;
-  nota: number;
-  sugestoesSupervisor?: string;
-  observacoesAvaliado?: string;
-  itens?: ItemAvaliacaoDesempenho[];
+export interface ColaboradorForm {
+  id_colaborador: number;
+  nome: string;
+}
+
+export interface SupervisorForm {
+  id_supervisor: number;
+  nome: string;
 }
 
 export interface AvaliacaoDesempenhoForm {
-  colaboradores: Colaborador[];
-  supervisores: Colaborador[];
+  colaboradores: ColaboradorForm[];
+  supervisores: SupervisorForm[];
 }
 
 export interface CadastrarAvaliacaoPayload {
-  colaborador: number;
-  supervisor: number;
-  mesCompetencia: string;
+  id_colaborador: number;
+  id_supervisor: number;
+  competencia: string;
 }
 
 export interface EditarAvaliacaoPayload {
-  sugestoesSupervisor?: string;
-  observacoesAvaliado?: string;
+  sugestao_supervisor?: string;
+  observacao_avaliado?: string;
   itens?: { id: number; nota: number; observacoes?: string }[];
 }

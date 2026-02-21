@@ -1,0 +1,8 @@
+{
+  "/api": {
+    "target": "https://sume.lccv.ufal.br",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}
